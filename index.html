@@ -37,7 +37,7 @@
         const apiKey = '5fe4b420-6441-430a-89e8-f22f1b9876b0'; // Sostituire con la propria API key di Random.org
 
         async function getRandomNumber(min, max) {
-            const response = await fetch(`https://api.random.org/json-rpc/2/invoke`, {
+            const response = await fetch('https://api.random.org/json-rpc/2/invoke', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -57,7 +57,11 @@
             });
 
             const data = await response.json();
-            return data.result.random.data[0];
+            if (data.result && data.result.random && data.result.random.data) {
+                return data.result.random.data[0];
+            } else {
+                throw new Error('Errore nella risposta dell\'API di Random.org');
+            }
         }
 
         async function generateClimate() {
@@ -89,15 +93,19 @@
         }
 
         async function updateClimate() {
-            const climate = await generateClimate();
-            document.getElementById('climate-type').innerText = climate.type;
-            document.getElementById('climate-description').innerText = climate.description;
-            document.getElementById('climate-temperature').innerText = climate.temperature;
-            document.getElementById('climate-humidity').innerText = climate.humidity;
+            try {
+                const climate = await generateClimate();
+                document.getElementById('climate-type').innerText = climate.type;
+                document.getElementById('climate-description').innerText = climate.description;
+                document.getElementById('climate-temperature').innerText = climate.temperature;
+                document.getElementById('climate-humidity').innerText = climate.humidity;
+            } catch (error) {
+                console.error('Errore durante la generazione del clima:', error);
+                document.getElementById('climate-box').innerHTML = '<p>Si è verificato un errore durante la generazione del clima. Riprova più tardi.</p>';
+            }
         }
 
         window.onload = updateClimate;
     </script>
 </body>
 </html>
-
