@@ -22,10 +22,20 @@
             display: inline-block;
             text-align: left;
         }
+        .input-box {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Clima Distopico di Palermo 2185</h1>
+    <div class="input-box">
+        <label for="day">Giorno: </label>
+        <input type="number" id="day" min="1" max="31">
+        <label for="month">Mese: </label>
+        <input type="number" id="month" min="1" max="12">
+        <button onclick="updateClimate()">Genera Clima</button>
+    </div>
     <div class="climate-box" id="climate-box">
         <p><strong>Tipo:</strong> <span id="climate-type"></span></p>
         <p><strong>Descrizione:</strong> <span id="climate-description"></span></p>
@@ -64,7 +74,26 @@
             }
         }
 
-        async function generateClimate() {
+        function getSeasonalModifiers(month) {
+            // Modificatori per la temperatura in base al mese
+            const modifiers = {
+                1: -10,  // Gennaio
+                2: -8,   // Febbraio
+                3: -5,   // Marzo
+                4: 0,    // Aprile
+                5: 5,    // Maggio
+                6: 10,   // Giugno
+                7: 15,   // Luglio
+                8: 15,   // Agosto
+                9: 10,   // Settembre
+                10: 5,   // Ottobre
+                11: 0,   // Novembre
+                12: -5   // Dicembre
+            };
+            return modifiers[month] || 0;
+        }
+
+        async function generateClimate(day, month) {
             const climates = [
                 { type: "Piogge Acide", description: "Piogge acide che corrodono lentamente le superfici e rendono l'aria irrespirabile senza protezioni.", temperatureRange: [10, 20] },
                 { type: "Tempeste di Sabbia", description: "Tempeste di sabbia provenienti dal deserto che oscurano il cielo e riducono drasticamente la visibilità.", temperatureRange: [30, 40] },
@@ -81,7 +110,8 @@
             const randomIndex = await getRandomNumber(0, climates.length - 1);
             const randomClimate = climates[randomIndex];
 
-            const temperature = await getRandomNumber(randomClimate.temperatureRange[0], randomClimate.temperatureRange[1]);
+            const seasonalModifier = month ? getSeasonalModifiers(month) : 0;
+            const temperature = await getRandomNumber(randomClimate.temperatureRange[0] + seasonalModifier, randomClimate.temperatureRange[1] + seasonalModifier);
             const humidity = await getRandomNumber(20, 100);
 
             return {
@@ -93,8 +123,11 @@
         }
 
         async function updateClimate() {
+            const day = document.getElementById('day').value;
+            const month = document.getElementById('month').value;
+
             try {
-                const climate = await generateClimate();
+                const climate = await generateClimate(day, month);
                 document.getElementById('climate-type').innerText = climate.type;
                 document.getElementById('climate-description').innerText = climate.description;
                 document.getElementById('climate-temperature').innerText = climate.temperature;
