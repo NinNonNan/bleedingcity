@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima Distopico di Palermo 2185</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .climate-box {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clima Distopico di Palermo 2185</h1>
+    <div class="climate-box" id="climate-box">
+        <p><strong>Tipo:</strong> <span id="climate-type"></span></p>
+        <p><strong>Descrizione:</strong> <span id="climate-description"></span></p>
+        <p><strong>Temperatura:</strong> <span id="climate-temperature"></span></p>
+        <p><strong>Umidità:</strong> <span id="climate-humidity"></span></p>
+    </div>
+
+    <script>
+        function generateClimate() {
+            const climates = [
+                { type: "Piogge Acide", description: "Piogge acide che corrodono lentamente le superfici e rendono l'aria irrespirabile senza protezioni.", temperatureRange: [10, 20] },
+                { type: "Tempeste di Sabbia", description: "Tempeste di sabbia provenienti dal deserto che oscurano il cielo e riducono drasticamente la visibilità.", temperatureRange: [30, 40] },
+                { type: "Radiazioni Solari Intense", description: "Radiazioni solari pericolose che richiedono protezioni speciali per uscire all'aperto.", temperatureRange: [35, 45] },
+                { type: "Smog Denso", description: "Smog denso causato dall'inquinamento industriale che rende difficile la respirazione.", temperatureRange: [15, 25] },
+                { type: "Clima Normale", description: "Una giornata sorprendentemente normale con cielo limpido e aria respirabile.", temperatureRange: [20, 30] },
+                { type: "Pioggia Radioattiva", description: "Precipitazioni contaminate da materiale radioattivo, pericolose per la salute.", temperatureRange: [10, 20] },
+                { type: "Neve Tossica", description: "Neve composta da sostanze chimiche tossiche che può causare gravi ustioni al contatto.", temperatureRange: [-5, 5] },
+                { type: "Venti Gelidi", description: "Venti estremamente freddi provenienti da nord che abbassano drasticamente le temperature.", temperatureRange: [-10, 0] },
+                { type: "Tempeste Elettriche", description: "Tempeste con fulmini costanti e potenti scariche elettriche che causano blackout frequenti.", temperatureRange: [20, 30] },
+                { type: "Umidità Asfissiante", description: "Un livello di umidità insopportabile che rende difficile la respirazione e provoca un caldo opprimente.", temperatureRange: [25, 35] }
+            ];
+
+            // Scegli un clima randomicamente
+            const randomClimate = climates[Math.floor(Math.random() * climates.length)];
+
+            // Genera una temperatura randomica all'interno del range specificato
+            const temperature = Math.floor(Math.random() * (randomClimate.temperatureRange[1] - randomClimate.temperatureRange[0] + 1)) + randomClimate.temperatureRange[0];
+
+            // Genera un livello di umidità randomico tra 20% e 100%
+            const humidity = Math.floor(Math.random() * 81) + 20;
+
+            return {
+                type: randomClimate.type,
+                description: randomClimate.description,
+                temperature: `${temperature}°C`,
+                humidity: `${humidity}%`
+            };
+        }
+
+        // Funzione per aggiornare la visualizzazione del clima
+        function updateClimate() {
+            const climate = generateClimate();
+            document.getElementById('climate-type').innerText = climate.type;
+            document.getElementById('climate-description').innerText = climate.description;
+            document.getElementById('climate-temperature').innerText = climate.temperature;
+            document.getElementById('climate-humidity').innerText = climate.humidity;
+        }
+
+        // Aggiorna il clima quando la pagina viene caricata
+        window.onload = updateClimate;
+    </script>
+</body>
+</html>
