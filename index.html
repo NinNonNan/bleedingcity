@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clima Distopico di Palermo 2185</title>
-    <!-- MDBootstrap CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet">
+    <!-- jQuery and jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,8 +43,9 @@
         <p><strong>Umidità:</strong> <span id="climate-humidity"></span></p>
     </div>
 
-    <!-- MDBootstrap JS -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+    <!-- jQuery and jQuery UI JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         const apiKey = '5fe4b420-6441-430a-89e8-f22f1b9876b0'; // Sostituire con la propria API key di Random.org
 
@@ -126,7 +127,7 @@
 
         async function updateClimate() {
             const date = document.getElementById('date-picker').value;
-            const [year, month, day] = date.split('-').map(Number);
+            const [month, day, year] = date.split('/').map(Number);
 
             try {
                 const climate = await generateClimate(day, month);
@@ -140,14 +141,15 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            new mdb.Datepicker(document.getElementById('date-picker'), {
-                format: 'yyyy-mm-dd',
-                autoClose: true
+        $(function() {
+            $("#date-picker").datepicker({
+                dateFormat: "mm/dd/yy",
+                onSelect: updateClimate
             });
             updateClimate(); // Generate climate on page load
         });
     </script>
 </body>
 </html>
+
 
