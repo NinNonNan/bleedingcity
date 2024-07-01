@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clima Distopico di Palermo 2185</title>
+    <!-- MDBootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,10 +32,8 @@
 <body>
     <h1>Clima Distopico di Palermo 2185</h1>
     <div class="input-box">
-        <label for="day">Giorno: </label>
-        <input type="number" id="day" min="1" max="31">
-        <label for="month">Mese: </label>
-        <input type="number" id="month" min="1" max="12">
+        <label for="date-picker">Seleziona la data: </label>
+        <input type="text" id="date-picker" class="form-control">
         <button onclick="updateClimate()">Genera Clima</button>
     </div>
     <div class="climate-box" id="climate-box">
@@ -43,6 +43,8 @@
         <p><strong>Umidità:</strong> <span id="climate-humidity"></span></p>
     </div>
 
+    <!-- MDBootstrap JS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
     <script>
         const apiKey = '5fe4b420-6441-430a-89e8-f22f1b9876b0'; // Sostituire con la propria API key di Random.org
 
@@ -123,8 +125,8 @@
         }
 
         async function updateClimate() {
-            const day = document.getElementById('day').value;
-            const month = document.getElementById('month').value;
+            const date = document.getElementById('date-picker').value;
+            const [year, month, day] = date.split('-').map(Number);
 
             try {
                 const climate = await generateClimate(day, month);
@@ -138,7 +140,14 @@
             }
         }
 
-        window.onload = updateClimate;
+        document.addEventListener('DOMContentLoaded', function () {
+            new mdb.Datepicker(document.getElementById('date-picker'), {
+                format: 'yyyy-mm-dd',
+                autoClose: true
+            });
+            updateClimate(); // Generate climate on page load
+        });
     </script>
 </body>
 </html>
+
